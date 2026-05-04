@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>EcoArequipa - Catálogo</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>EcoArequipa</h1>
+    <a href="carrito.html">Ver carrito</a>
+  </header>
+  <main>
+    <h2>Productos</h2>
+    <div id="productos"></div>
+  </main>
+  <script src="js/productos.js"></script>
+  <script>
+    const contenedor = document.getElementById("productos");
+    function renderProductos() {
+      let html = "";
+      PRODUCTOS.forEach(p => {
+        html += `
+          <div class="card">
+            <img src="${p.imagen}" alt="${p.nombre}" class="card-img">
+            <div class="card-info">
+              <h3>${p.nombre}</h3>
+              <p class="descripcion">${p.descripcion.substring(0, 90)}...</p>
+              <p class="precio">S/ ${p.precio}</p>
+            </div>
+            <div class="card-actions">
+              <button onclick="Carrito.agregar(${p.id})">Agregar al carrito</button>
+              <a href="producto.html?id=${p.id}" class="detalle-btn">Ver detalle</a>
+            </div>
+          </div>`;
+      });
+      contenedor.innerHTML = html;
+    }
+    renderProductos();
+  </script>
+</body>
+</html>

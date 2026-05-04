@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Producto - EcoArequipa</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>EcoArequipa</h1>
+    <a href="index.html">Volver</a>
+  </header>
+  <main>
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn-volver">← Volver al catálogo</a>
+    </div>
+    <div id="detalle"></div>
+  </main>
+  <script src="js/productos.js"></script>
+  <script>
+    const contenedor = document.getElementById("detalle");
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const producto = PRODUCTOS.find(p => p.id === id);
+    if (!producto) {
+      contenedor.innerHTML = "<p>Producto no encontrado</p>";
+    } else {
+      contenedor.innerHTML = `
+        <div class="detalle-card">
+          <img src="${producto.imagen}" alt="${producto.nombre}"> 
+          <h1>${producto.nombre}</h1>
+          <p>${producto.descripcion}</p>
+          <h3 class="precio">S/ ${producto.precio}</h3>
+          <button onclick="Carrito.agregar(${producto.id}); alert('Agregado')">
+            Agregar al carrito
+          </button>
+        </div>`;
+    }
+  </script>
+</body>
+</html>

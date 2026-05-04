@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito - EcoArequipa</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>EcoArequipa</h1>
+    <a href="index.html">Seguir comprando</a>
+  </header>
+  <main>
+    <h2>Tu Bolsa de Compras</h2>
+    <div class="carrito-container">
+      <div id="carrito"></div>
+      <aside class="resumen-compra">
+        <h3>Resumen de orden</h3>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <div style="display: flex; justify-content: space-between;">
+          <span>Subtotal</span>
+          <span id="subtotal">S/ 0.00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: 10px; color: #43a047; font-weight: bold;">
+          <span>Envío Eco-Amigable</span>
+          <span>Gratis</span>
+        </div>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <div style="display: flex; justify-content: space-between; font-size: 1.4rem; font-weight: bold;">
+          <span>Total</span>
+          <span id="total-final">S/ 0.00</span>
+        </div>
+        <a href="checkout.html"><button class="btn-pagar">Proceder al pago</button></a>
+      </aside>
+    </div>
+  </main>
+  <script src="js/productos.js"></script>
+  <script>
+    function renderCarrito() {
+      const items = Carrito.obtener();
+      const contenedor = document.getElementById("carrito");
+      contenedor.innerHTML = items.length === 0 ? "<p>Bolsa vacía</p>" : "";
+      items.forEach(item => {
+        contenedor.innerHTML += `
+          <div class="item-carrito">
+            <div><h4>${item.nombre}</h4><p>S/ ${item.precio}</p></div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+              <input type="number" value="${item.cantidad}" min="1" onchange="Carrito.cambiarCantidad(${item.id}, this.value); renderCarrito();">
+              <button class="btn-eliminar" onclick="Carrito.eliminar(${item.id}); renderCarrito();">Quitar</button>
+            </div>
+          </div>`;
+      });
+      const total = Carrito.subtotal();
+      document.getElementById("subtotal").innerText = `S/ ${total}`;
+      document.getElementById("total-final").innerText = `S/ ${total}`;
+    }
+    renderCarrito();
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - EcoArequipa</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>EcoArequipa</h1>
+        <a href="carrito.html">Volver</a>
+    </header>
+    <main class="checkout-wrapper">
+        <div class="progress-bar">
+            <div class="progress-line"></div>
+            <div class="step active">1</div>
+            <div class="step active">2</div>
+            <div id="step-3" class="step">3</div>
+        </div>
+        <div id="payment-area">
+            <form id="form-checkout">
+                <h2>Información de Pago</h2>
+                <p id="error-msg" style="color: #d63031; background: #fab1a044; padding: 10px; border-radius: 8px; display: none; margin-bottom: 15px; font-size: 0.9rem;">
+                    Tu carrito está vacío. Agrega productos para continuar.
+                </p>
+                <div class="form-group">
+                    <label>Nombre en la Tarjeta</label>
+                    <input type="text" placeholder="JUAN PEREZ" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de Tarjeta</label>
+                    <input type="text" pattern="\d{16}" maxlength="16" onkeypress="return /[0-9]/.test(event.key)" placeholder="4111222233334444" required>
+                </div>
+                <div style="display: flex; gap: 15px;" class="form-group">
+                    <div style="flex: 1;">
+                        <label>Vencimiento (MMYY)</label>
+                        <input type="text" pattern="\d{4}" maxlength="4" onkeypress="return /[0-9]/.test(event.key)" placeholder="1226" required>
+                    </div>
+                    <div style="flex: 1;">
+                        <label>CVV</label>
+                        <input type="password" pattern="\d{3}" maxlength="3" onkeypress="return /[0-9]/.test(event.key)" placeholder="123" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn-pagar">Finalizar Compra</button>
+            </form>
+        </div>
+    </main>
+    <script src="js/productos.js"></script>
+    <script>
+        const form = document.getElementById('form-checkout');
+        const errorMsg = document.getElementById('error-msg');
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (Carrito.obtener().length === 0) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            form.style.display = 'none';
+            const loader = document.createElement('div');
+            loader.innerHTML = `
+                <div style="text-align: center; padding: 50px;">
+                    <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #1b5e20; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                    <h3>Procesando pago...</h3>
+                    <p>Validando con la pasarela de EcoArequipa.</p>
+                </div>`;
+            document.getElementById('payment-area').appendChild(loader);
+            const style = document.createElement('style');
+            style.innerHTML = "@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }";
+            document.head.appendChild(style);
+            setTimeout(() => {
+                document.getElementById('step-3').classList.add('active');
+                Carrito.vaciar();
+                window.location.href = 'confirmacion.html';
+            }, 2500);
+        });
+    </script>
+</body>
+</html>
