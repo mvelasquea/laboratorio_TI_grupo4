@@ -1,0 +1,40 @@
+Date: 1/6/2026
+Time: 10:42
+Phone Number: +51923886858
+Message: ⚠️ ¡ALERTA IOT! [CONTENEDOR-01]Hora: 2026-06-01T10:05:00Ubicación: https://maps.google.com/?q=-16.415,-71.54Incidentes: Baja Temperatura (DS18B20): 1.5°C [PT100: 1.48°C] (Límite: <2.0°C)
+--------------------
+Date: 1/6/2026
+Time: 10:43
+Phone Number: +51923886858
+Message: ⚠️ ¡ALERTA IOT! [CONTENEDOR-01]Hora: 2026-06-01T10:10:00Ubicación: https://maps.google.com/?q=-16.421,-71.543Incidentes: Puerta Abierta por 28s (Límite: >15s)
+--------------------
+Date: 1/6/2026
+Time: 10:46
+Phone Number: +51923886858
+Message: ⚠️ ¡ALERTA IOT! [CONTENEDOR-01]Hora: 2026-06-01T10:05:00Ubicación: https://maps.google.com/?q=-16.415,-71.54Incidentes: Baja Temperatura (DS18B20): 1.5°C [PT100: 1.48°C] (Límite: <2.0°C)
+--------------------
+Date: 1/6/2026
+Time: 10:47
+Phone Number: +51923886858
+Message: ⚠️ ¡ALERTA IOT! [CONTENEDOR-01]Hora: 2026-06-01T10:10:00Ubicación: https://maps.google.com/?q=-16.421,-71.543Incidentes: Puerta Abierta por 28s (Límite: >15s)
+--------------------
+Date: 1/6/2026
+Time: 10:48
+Phone Number: +51923886858
+Message: ⚠️ ¡ALERTA IOT! [CONTENEDOR-01]Hora: 2026-06-01T10:15:00Ubicación: https://maps.google.com/?q=-16.43,-71.55Incidentes: Alta Temperatura (DS18B20): 9.3°C [PT100: 9.35°C] (Límite: >8.0°C)
+--------------------
+Date: 1/6/2026
+Time: 10:54
+Phone Number: +51923886858
+Message: [ALERTA IOT] [CONTENEDOR-01]Hora: 2026-06-01T10:05:00Ubicación: https://maps.google.com/?q=-16.415,-71.54Incidentes: Baja Temperatura (DS18B20): 1.5°C [PT100: 1.48°C] (Límite: <2.0°C)
+--------------------
+Date: 1/6/2026
+Time: 10:55
+Phone Number: +51923886858
+Message: [ALERTA IOT] [CONTENEDOR-01]Hora: 2026-06-01T10:10:00Ubicación: https://maps.google.com/?q=-16.421,-71.543Incidentes: Puerta Abierta por 28s (Límite: >15s)
+--------------------
+Date: 1/6/2026
+Time: 10:56
+Phone Number: +51923886858
+Message: [ALERTA IOT] [CONTENEDOR-01]Hora: 2026-06-01T10:15:00Ubicación: https://maps.google.com/?q=-16.43,-71.55Incidentes: Alta Temperatura (DS18B20): 9.3°C [PT100: 9.35°C] (Límite: >8.0°C)
+--------------------

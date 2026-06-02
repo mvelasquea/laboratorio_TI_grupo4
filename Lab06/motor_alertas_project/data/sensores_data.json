@@ -1,0 +1,66 @@
+[
+  {
+    "timestamp": "2026-06-01T10:00:00",
+    "dispositivo_id": "CONTENEDOR-01",
+    "sensores": {
+      "DS18B20_temp": 5.4,
+      "PT100_temp": 5.42,
+      "SHT31_humedad": 45.2,
+      "puerta_abierta_segundos": 0
+    },
+    "gps": {
+      "modelo": "NEO-M8N",
+      "latitud": -16.4090,
+      "longitud": -71.5375,
+      "velocidad_kmh": 45.0
+    }
+  },
+  {
+    "timestamp": "2026-06-01T10:05:00",
+    "dispositivo_id": "CONTENEDOR-01",
+    "sensores": {
+      "DS18B20_temp": 1.5,
+      "PT100_temp": 1.48,
+      "SHT31_humedad": 42.1,
+      "puerta_abierta_segundos": 4
+    },
+    "gps": {
+      "modelo": "NEO-M8N",
+      "latitud": -16.4150,
+      "longitud": -71.5400,
+      "velocidad_kmh": 50.2
+    }
+  },
+  {
+    "timestamp": "2026-06-01T10:10:00",
+    "dispositivo_id": "CONTENEDOR-01",
+    "sensores": {
+      "DS18B20_temp": 6.2,
+      "PT100_temp": 6.21,
+      "SHT31_humedad": 44.5,
+      "puerta_abierta_segundos": 28
+    },
+    "gps": {
+      "modelo": "NEO-M8N",
+      "latitud": -16.4210,
+      "longitud": -71.5430,
+      "velocidad_kmh": 0.0
+    }
+  },
+  {
+    "timestamp": "2026-06-01T10:15:00",
+    "dispositivo_id": "CONTENEDOR-01",
+    "sensores": {
+      "DS18B20_temp": 9.3,
+      "PT100_temp": 9.35,
+      "SHT31_humedad": 55.0,
+      "puerta_abierta_segundos": 2
+    },
+    "gps": {
+      "modelo": "NEO-M8N",
+      "latitud": -16.4300,
+      "longitud": -71.5500,
+      "velocidad_kmh": 55.5
+    }
+  }
+]
