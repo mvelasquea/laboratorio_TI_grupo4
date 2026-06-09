@@ -1,0 +1,1 @@
+cd / && chmod +x /home/user/deploy_and_test.sh && /home/user/deploy_and_test.sh

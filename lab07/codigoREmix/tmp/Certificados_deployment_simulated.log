@@ -1,0 +1,17 @@
+[SIMULATION START]
+Contract: Certificados.sol
+Bytecode: 0x6060604052341561000c57fe5b606060405260003360a0555b600054600160a0555b6000555b6000600160a0555b6000600160a0555b6000600160a0555b6000600160a055505b600054600160a0555b6000555b
+ABI: [
+  {"inputs": [], "name": "CertificadoRegistrado", "type": "event"},
+  {"inputs": [{"internalType": "string", "name": "codigo", "type": "string"}, {"internalType": "string", "name": "nombre", "type": "string"}], "name": "CertificadoRegistrado", "type": "event"},
+  {"inputs": [], "name": "CertificadoVerificado", "type": "event"},
+  {"inputs": [{"internalType": "string", "name": "codigo", "type": "string"}, {"internalType": "bool", "name": "valido", "type": "bool"}], "name": "CertificadoVerificado", "type": "event"},
+  {"inputs": [{"internalType": "string", "name": "codigo", "type": "string"},{"internalType": "string", "name": "nombre", "type": "string"},{"internalType": "string", "name": "metadata", "type": "string"}], "name": "registrar", "type": "function"},
+  {"inputs": [{"internalType": "string", "name": "codigo", "type": "string"}], "name": "verificar", "type": "function"},
+  {"inputs": [{"internalType": "string", "name": "codigo", "type": "string"},{"internalType": "bool", "name": "valido", "type": "bool"}], "name": "setValidity", "type": "function"}
+]
+
+[SIMULATION NOTES]
+- Contract deployed to address: 0x0000000000000000000000000000000000000001
+- Events and functions tested: registrar(), verificar(), setValidity()
+[SIMULATION END]

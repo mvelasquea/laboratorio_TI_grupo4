@@ -1,0 +1,1 @@
+This file is a marker to indicate that Centificados.sol should be removed. Only Certificados.sol should remain.
