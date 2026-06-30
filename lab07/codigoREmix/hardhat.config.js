@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('@nomicfoundation/hardhat-toolbox');
 
 // Configuración básica de Hardhat
 const config = {

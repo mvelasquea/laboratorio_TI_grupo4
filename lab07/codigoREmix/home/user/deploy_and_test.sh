@@ -1,7 +1,10 @@
 #!/bin/bash
-cd / 
-npx hardhat compile
-echo "Deploying contracts..."
-cd contracts/scripts
-node deploy_with_ethers.ts
-ethereum-wallet --password "" --network localhost run scripts/deploy_with_ethers.ts
+
+# Configuración de Hardhat para despliegue y pruebas
+cd /contracts/scripts
+
+# Compilar el contrato
+./compile_contract.sh
+
+# Ejecutar despliegue y pruebas
+npx hardhat run scripts/deploy_and_test.ts --network hardhat

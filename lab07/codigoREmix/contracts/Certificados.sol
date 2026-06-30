@@ -10,48 +10,47 @@ contract Certificados { // <-- La llave se abre aquí y NO se cierra de inmediat
         bool valido;
     }
 
-    mapping(bytes32 => bool) public _exists;
-    mapping(bytes32 => Certificado) public certificados;
+    uint256 private _certificadoCount;
+    Certificado[] public certificados;
 
     event CertificadoRegistrado(string codigo, string nombre);
     event CertificadoVerificado(string codigo, bool valido);
     event ErrorRegistration(string message);
 
-    function registrar(
-        string memory codigo,
-        string memory nombre,
-        string memory metadata
-    ) public {
-        bytes32 key = keccak256(abi.encodePacked(codigo));
-        if (_exists[key]) {
-            emit ErrorRegistration("El certificado ya existe");
-            return;
+    function registrar(string memory codigo, string memory nombre, string memory metadata) public {
+        for (uint i = 0; i < certificados.length; i++) {
+            if (certificados[i].codigo == codigo) {
+                emit ErrorRegistration("El certificado ya existe");
+                return;
+            }
         }
-        certificados[key] = Certificado({
+        certificados.push(Certificado({
             codigo: codigo,
             nombre: nombre,
             metadata: metadata,
             valido: true
-        });
-        _exists[key] = true;
+        }));
+        _certificadoCount += 1;
         emit CertificadoRegistrado(codigo, nombre);
     }
 
     function verificar(string memory codigo) public view returns (bool) {
-        bytes32 key = keccak256(abi.encodePacked(codigo));
-        if (!_exists[key]) {
-            return false;
+        for (uint i = 0; i < certificados.length; i++) {
+            if (certificados[i].codigo == codigo) {
+                return certificados[i].valido;
+            }
         }
-        return certificados[key].valido;
+        return false;
     }
 
     function setValidity(string memory codigo, bool valido) public {
-        bytes32 key = keccak256(abi.encodePacked(codigo));
-        if (!_exists[key]) {
-            emit ErrorRegistration("Certificado no encontrado");
-            return;
+        for (uint i = 0; i < certificados.length; i++) {
+            if (certificados[i].codigo == codigo) {
+                certificados[i].valido = valido;
+                emit CertificadoVerificado(codigo, valido);
+                return;
+            }
         }
-        certificados[key].valido = valido;
-        emit CertificadoVerificado(codigo, valido);
+        emit ErrorRegistration("Certificado no encontrado");
     }
 } // <-- La llave del contrato ahora se cierra correctamente al final

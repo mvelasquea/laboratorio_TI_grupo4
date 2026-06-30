@@ -1,33 +1,24 @@
-const { ethers } = require('ethers');
+import { ethers, run } from 'hardhat';
 
-// Configuración para usar Hardhat
-async function deployAndTest() {
-  // Configuración de Hardhat
-  const hre = require('hardhat');
+async function main() {
+  // Obtener el contrato factory y el contrato desplegado
   const CertificadosFactory = await ethers.getContractFactory('Certificados');
   const certificadosContract = await CertificadosFactory.deploy();
   await certificadosContract.deployed();
   console.log(`Certificados contract address: ${certificadosContract.address}`);
-  
+
   // Registrar el certificado
   const codigo = 'UNSA-2026-0041';
   const nombreTitular = 'Juan Pérez';
   const metadata = '{}'; // Usar un JSON vacío o el contenido correcto desde un archivo
   await certificadosContract.registrar(codigo, nombreTitular, metadata);
   console.log(`Certificado ${codigo} registrado con éxito para ${nombreTitular}`);
-  
-  // Ejecutar pruebas
-  await hre.run('test', { blockInterval: 0 });
+
+  // Ejecutar pruebas unitarias
+  await run('test', { blockInterval: 0 });
 }
 
-// Deploy Certificados contract
-deployAndTest();
-
-// Ejecutar el despliegue y pruebas automáticas
-(async () => {
-  try {
-    await deployAndTest();
-  } catch (e) {
-    console.error(e.message);
-  }
-})();
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});

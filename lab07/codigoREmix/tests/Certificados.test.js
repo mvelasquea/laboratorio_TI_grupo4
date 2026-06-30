@@ -1,5 +1,47 @@
 const { expect } = require('chai');
 const { ethers } = require('ethers');
+const { loadFixture } = require('@nomicfoundation/hardhat-toolbox/helpers');
+const Certificados = require('../contracts/build/Certificados.json').abi;
+
+describe('Certificados Contract', function () {
+  async function deployContract() {
+    const [deployer] = await ethers.getSigners();
+    const CertificadosFactory = await ethers.getContractFactory(Certificados);
+    return await CertificadosFactory.deploy();
+  }
+
+  it('Should register and verify a certificate', async function () {
+    const contract = await loadFixture(deployContract);
+    const codigo = 'CERT-001';
+    const nombre = 'Certificado de Estudios';
+    const metadata = 'Metadata del certificado';
+
+    await contract.registrar(codigo, nombre, metadata);
+    const isValid = await contract.verificar(codigo);
+    expect(isValid).to.be.true;
+
+    await contract.setValidity(codigo, false);
+    const isInvalid = await contract.verificar(codigo);
+    expect(isInvalid).to.be.false;
+  };
+
+  it('Should emit ErrorRegistration when trying to register a duplicate certificate', async function () {
+    const contract = await loadFixture(deployContract);
+    const codigo = 'CERT-001';
+    const nombre = 'Certificado de Estudios';
+    const metadata = 'Metadata del certificado';
+
+    await contract.registrar(codigo, nombre, metadata);
+    await expect(contract.registrar(codigo, 'Duplicate', metadata)).to.emit(contract, 'ErrorRegistration');
+  });
+
+  it('Should emit ErrorRegistration when trying to set validity of non-existent certificate', async function () {
+    const contract = await loadFixture(deployContract);
+    const codigo = 'CERT-NONEXISTENT';
+    await expect(contract.setValidity(codigo, true)).to.emit(contract, 'ErrorRegistration');
+  });
+});const { expect } = require('chai');
+const { ethers } = require('ethers');
 const { solidity } = require('ethereum-waffle');
 
 describe('Certificados Contract', function () {
