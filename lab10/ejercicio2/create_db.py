@@ -56,129 +56,118 @@ CREATE TABLE kpis (
 );
 """)
 
-# 15 Productos
+# 10 Productos
 productos = [
     (1,'Laptop HP Pavilion 15','Electrónica','Computadoras','ELEC-001',450,699.99,1,2.1,1825),
     (2,'iPhone 15 Pro Max','Electrónica','Smartphones','ELEC-002',899,1199.99,2,0.23,1095),
     (3,'Samsung Galaxy S24','Electrónica','Smartphones','ELEC-003',650,899.99,2,0.19,1095),
-    (4,'Audífonos Sony WH-1000XM5','Electrónica','Audio','ELEC-005',250,349.99,3,0.25,1825),
-    (5,'Smart TV LG 55','Electrónica','Televisores','ELEC-006',380,549.99,4,15.5,2555),
-    (6,'PlayStation 5','Electrónica','Videojuegos','ELEC-007',400,499.99,5,4.5,2190),
-    (7,'Camiseta Nike Dri-FIT','Ropa','Hombres','ROPA-001',12,29.99,7,0.2,730),
-    (8,'Jeans Levis 501','Ropa','Hombres','ROPA-002',25,59.99,7,0.8,1095),
-    (9,'Chaqueta North Face','Ropa','Unisex','ROPA-004',85,179.99,9,1.2,2190),
-    (10,'Tenis Adidas Ultraboost','Ropa','Calzado','ROPA-005',75,149.99,10,0.6,1095),
-    (11,'Arroz Faraón 1kg','Alimentos','Granos','ALIM-001',0.8,1.49,8,1,365),
-    (12,'Coca-Cola 2L','Alimentos','Bebidas','ALIM-003',0.6,1.29,8,2,180),
-    (13,'Leche Gloria 400ml','Alimentos','Lácteos','ALIM-005',0.6,1.19,8,0.42,30),
-    (14,'Jabón Dove Original','Higiene','Cuidado Personal','HIGI-001',0.8,2.49,8,0.15,1095),
-    (15,'Shampoo Pantene 400ml','Higiene','Cabello','HIGI-002',2.5,6.99,8,0.42,730),
+    (4,'Audífonos Sony','Electrónica','Audio','ELEC-005',250,349.99,3,0.25,1825),
+    (5,'PlayStation 5','Electrónica','Videojuegos','ELEC-007',400,499.99,4,4.5,2190),
+    (6,'Camiseta Nike','Ropa','Hombres','ROPA-001',12,29.99,5,0.2,730),
+    (7,'Jeans Levis','Ropa','Hombres','ROPA-002',25,59.99,5,0.8,1095),
+    (8,'Coca-Cola 2L','Alimentos','Bebidas','ALIM-001',0.6,1.29,6,2,180),
+    (9,'Leche Gloria','Alimentos','Lácteos','ALIM-002',0.6,1.19,6,0.42,30),
+    (10,'Jabón Dove','Higiene','Cuidado','HIGI-001',0.8,2.49,6,0.15,1095),
 ]
 c.executemany("INSERT INTO productos VALUES (?,?,?,?,?,?,?,?,?,?)", productos)
 
-# 8 Tiendas
+# 4 Tiendas
 tiendas = [
     (1,'RetailNova Lima Centro','Perú','Lima','Física','Grande','Av. Principal 123','Carlos Mendoza','2018-01-15'),
-    (2,'RetailNova Miraflores','Perú','Lima','Física','Mediana','Av. Larco 456','Ana Torres','2019-03-20'),
-    (3,'RetailNova Bogotá Norte','Colombia','Bogotá','Física','Grande','Carrera 7 #45-67','Pedro Ramírez','2017-02-28'),
-    (4,'RetailNova Santiago Centro','Chile','Santiago','Física','Grande','Av. Libertador 1234','Roberto Díaz','2016-05-10'),
-    (5,'RetailNova Buenos Aires Norte','Argentina','Buenos Aires','Física','Grande','Av. Santa Fe 1234','Diego Martínez','2016-08-20'),
-    (6,'RetailNova Ciudad de México','México','Ciudad de México','Física','Grande','Av. Reforma 3456','Alejandro Reyes','2015-03-15'),
-    (7,'RetailNova São Paulo Centro','Brasil','São Paulo','Física','Grande','Av. Paulista 2345','Marcos Silva','2015-06-10'),
-    (8,'RetailNova Online Latam','Perú','Lima','Online','Grande','Virtual','Digital Latam','2020-01-01'),
+    (2,'RetailNova Bogotá','Colombia','Bogotá','Física','Grande','Carrera 7 #45-67','Pedro Ramírez','2017-02-28'),
+    (3,'RetailNova Santiago','Chile','Santiago','Física','Grande','Av. Libertador 1234','Roberto Díaz','2016-05-10'),
+    (4,'RetailNova Online Latam','Perú','Lima','Online','Grande','Virtual','Digital Latam','2020-01-01'),
 ]
 c.executemany("INSERT INTO tiendas VALUES (?,?,?,?,?,?,?,?,?)", tiendas)
 
-# 6 Proveedores
+# 4 Proveedores
 proveedores = [
-    (1,'TechSupply Corp','Estados Unidos','San José',7,95.5,'+1-408-555-0101','contact@techsupply.com'),
+    (1,'TechSupply Corp','USA','San José',7,95.5,'+1-408-555-0101','contact@techsupply.com'),
     (2,'Global Electronics','China','Shenzhen',15,92.3,'+86-755-555-0202','sales@globalelec.com'),
     (3,'AudioMax Solutions','Japón','Tokyo',12,97.8,'+81-3-555-0303','info@audiomax.jp'),
-    (4,'GameZone Import','Estados Unidos','Los Ángeles',8,91.5,'+1-310-555-0505','wholesale@gamezone.com'),
-    (5,'SportWorld Distribution','Estados Unidos','Portland',10,93.6,'+1-503-555-0909','sales@sportworld.com'),
-    (6,'AgroIndustrial SAC','Perú','Lima',2,89.5,'+51-1-555-1919','ventas@agroindustrial.pe'),
+    (4,'AgroIndustrial SAC','Perú','Lima',2,89.5,'+51-1-555-1919','ventas@agroindustrial.pe'),
 ]
 c.executemany("INSERT INTO proveedores VALUES (?,?,?,?,?,?,?,?)", proveedores)
 
-# 120 Inventarios (8 tiendas x 15 productos)
+# 40 Inventarios (4 tiendas x 10 productos)
 inventarios = []
 id_inv = 1
-for tienda_id in range(1, 9):
-    for prod_id in range(1, 16):
-        stock_min = random.randint(5, 20)
-        stock_max = stock_min * 5
-        stock_act = random.randint(max(1, stock_min - 5), stock_max)
+for tienda_id in range(1, 5):
+    for prod_id in range(1, 11):
+        stock_min = random.randint(5, 15)
+        stock_max = stock_min * 4
+        stock_act = random.randint(max(1, stock_min - 4), stock_max)
         inventarios.append((id_inv, tienda_id, prod_id, stock_act, stock_min, stock_max, '2024-11-20'))
         id_inv += 1
 c.executemany("INSERT INTO inventarios VALUES (?,?,?,?,?,?,?)", inventarios)
 
-# ~100 Ventas
+# 30 Ventas
 ventas = []
 id_venta = 1
-for dia in range(1, 16):
+for dia in range(1, 11):
     fecha = f'2024-11-{dia:02d}'
-    for _ in range(random.randint(4, 8)):
-        tienda_id = random.randint(1, 8)
-        prod_id = random.randint(1, 15)
-        cantidad = random.randint(1, 5)
-        precio = round(random.uniform(1, 300), 2)
+    for _ in range(random.randint(2, 4)):
+        tienda_id = random.randint(1, 4)
+        prod_id = random.randint(1, 10)
+        cantidad = random.randint(1, 3)
+        precio = round(random.uniform(1, 200), 2)
         total = round(cantidad * precio, 2)
         metodo = random.choice(['Efectivo', 'Tarjeta Crédito', 'Tarjeta Débito'])
         ventas.append((id_venta, fecha, tienda_id, prod_id, cantidad, precio, total, metodo))
         id_venta += 1
 c.executemany("INSERT INTO ventas VALUES (?,?,?,?,?,?,?,?)", ventas)
 
-# ~40 Órdenes
+# 15 Órdenes
 ordenes = []
 id_ord = 1
-for dia in range(1, 16):
+for dia in range(1, 11):
     fecha = f'2024-11-{dia:02d}'
-    for _ in range(random.randint(1, 3)):
-        tienda_id = random.randint(1, 8)
-        prov_id = random.randint(1, 6)
+    for _ in range(1):
+        tienda_id = random.randint(1, 4)
+        prov_id = random.randint(1, 4)
         estado = random.choice(['Entregado', 'Enviado', 'Pendiente'])
-        total = round(random.uniform(500, 15000), 2)
-        fecha_ent = f'2024-11-{min(dia + random.randint(3, 10), 28):02d}'
+        total = round(random.uniform(500, 10000), 2)
+        fecha_ent = f'2024-11-{min(dia + random.randint(3, 8), 28):02d}'
         ordenes.append((id_ord, fecha, tienda_id, prov_id, estado, total, fecha_ent))
         id_ord += 1
 c.executemany("INSERT INTO ordenes VALUES (?,?,?,?,?,?,?)", ordenes)
 
-# ~40 Envíos
+# 15 Envíos
 envios = []
 id_env = 1
 for ord_id in range(1, id_ord):
     transportista = random.choice(['FedEx', 'DHL', 'UPS', 'Servientrega'])
-    origen = random.choice(['San José, USA', 'Shenzhen, China', 'Lima, Perú', 'Bogotá, Colombia'])
-    destino = random.choice(['Lima, Perú', 'Bogotá, Colombia', 'Santiago, Chile', 'Buenos Aires, Argentina'])
+    origen = random.choice(['San José, USA', 'Shenzhen, China', 'Lima, Perú'])
+    destino = random.choice(['Lima, Perú', 'Bogotá, Colombia', 'Santiago, Chile'])
     estado = random.choice(['Entregado', 'En Transito', 'Pendiente'])
-    fecha_sal = f'2024-11-{random.randint(1, 15):02d}'
-    fecha_lleg = f'2024-11-{random.randint(8, 28):02d}' if estado == 'Entregado' else None
-    costo = round(random.uniform(20, 500), 2)
+    fecha_sal = f'2024-11-{random.randint(1, 10):02d}'
+    fecha_lleg = f'2024-11-{random.randint(5, 28):02d}' if estado == 'Entregado' else None
+    costo = round(random.uniform(20, 400), 2)
     envios.append((id_env, ord_id, transportista, origen, destino, estado, fecha_sal, fecha_lleg, costo))
     id_env += 1
 c.executemany("INSERT INTO envios VALUES (?,?,?,?,?,?,?,?,?)", envios)
 
-# 120 Pronósticos (8 tiendas x 15 productos)
+# 40 Pronósticos (4 tiendas x 10 productos)
 pronosticos = []
 id_pr = 1
-for tienda_id in range(1, 9):
-    for prod_id in range(1, 16):
-        estimada = random.randint(10, 80)
-        real = estimada + random.randint(-10, 10)
+for tienda_id in range(1, 5):
+    for prod_id in range(1, 11):
+        estimada = random.randint(10, 60)
+        real = estimada + random.randint(-8, 8)
         prec = round(100 - abs(estimada - real) / estimada * 100, 1)
         pronosticos.append((id_pr, tienda_id, prod_id, '2024-11-15', estimada, max(0, real), prec))
         id_pr += 1
 c.executemany("INSERT INTO pronosticos VALUES (?,?,?,?,?,?,?)", pronosticos)
 
-# 8 KPIs
+# 4 KPIs
 kpis = []
-for tienda_id in range(1, 9):
-    ventas_t = round(random.uniform(20000, 60000), 2)
-    ordenes_t = random.randint(50, 150)
-    rotura = round(random.uniform(2, 6), 2)
-    entrega = round(random.uniform(4, 8), 1)
-    costo = round(random.uniform(800, 2000), 2)
-    precision = round(random.uniform(88, 97), 1)
+for tienda_id in range(1, 5):
+    ventas_t = round(random.uniform(15000, 50000), 2)
+    ordenes_t = random.randint(30, 100)
+    rotura = round(random.uniform(2, 5), 2)
+    entrega = round(random.uniform(4, 7), 1)
+    costo = round(random.uniform(600, 1500), 2)
+    precision = round(random.uniform(89, 96), 1)
     kpis.append((tienda_id, tienda_id, 11, 2024, rotura, entrega, costo, precision, ventas_t, ordenes_t))
 c.executemany("INSERT INTO kpis VALUES (?,?,?,?,?,?,?,?,?,?)", kpis)
 
@@ -195,6 +184,6 @@ for t in tables:
     cur.execute(f'SELECT COUNT(*) FROM [{t}]')
     count = cur.fetchone()[0]
     total += count
-    print(f'{t}: {count} registros')
+    print(f'{t}: {count}')
 print(f'\nTotal: {total} registros')
 conn.close()
