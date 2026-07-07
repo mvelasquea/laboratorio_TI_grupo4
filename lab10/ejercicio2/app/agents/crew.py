@@ -1,29 +1,40 @@
 from crewai import Crew, Process, Task
-from app.agents.agents import analista_operaciones, agente_ejecutivo
+from app.agents.agents import (
+    inventory_agent,
+    logistics_agent,
+    forecast_agent,
+    executive_agent,
+)
 
 
 def run_crew_analysis():
-    tarea_analisis = Task(
-        description=(
-            "Revisa el estado de inventarios, envíos pendientes, costos logísticos "
-            "y KPIs de RetailNova Group. Identifica los problemas más urgentes."
-        ),
-        expected_output="Lista de problemas críticos encontrados y datos relevantes.",
-        agent=analista_operaciones,
+    tarea_inventario = Task(
+        description="Revisa stock bajo y calcula puntos de reorden.",
+        expected_output="Lista de productos críticos.",
+        agent=inventory_agent,
     )
 
-    tarea_resumen = Task(
-        description=(
-            "Con base en el análisis anterior, genera un resumen ejecutivo "
-            "de 5 líneas con las acciones recomendadas."
-        ),
-        expected_output="Resumen ejecutivo breve con recomendaciones.",
-        agent=agente_ejecutivo,
+    tarea_logistica = Task(
+        description="Revisa envíos pendientes y costos logísticos.",
+        expected_output="Estado de logística.",
+        agent=logistics_agent,
+    )
+
+    tarea_pronostico = Task(
+        description="Evalúa demanda y precisión de pronósticos.",
+        expected_output="Análisis de pronósticos.",
+        agent=forecast_agent,
+    )
+
+    tarea_ejecutivo = Task(
+        description="Genera resumen ejecutivo con KPIs y alertas.",
+        expected_output="Resumen ejecutivo.",
+        agent=executive_agent,
     )
 
     crew = Crew(
-        agents=[analista_operaciones, agente_ejecutivo],
-        tasks=[tarea_analisis, tarea_resumen],
+        agents=[inventory_agent, logistics_agent, forecast_agent, executive_agent],
+        tasks=[tarea_inventario, tarea_logistica, tarea_pronostico, tarea_ejecutivo],
         process=Process.sequential,
         verbose=True,
     )
