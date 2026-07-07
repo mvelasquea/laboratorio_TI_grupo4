@@ -1,4 +1,15 @@
 const API_BASE = '';
+let agenteActual = null;
+
+// Guardar y cargar chats del localStorage
+function guardarChat(agente, mensajes) {
+    localStorage.setItem(`chat_${agente}`, JSON.stringify(mensajes));
+}
+
+function cargarChat(agente) {
+    const datos = localStorage.getItem(`chat_${agente}`);
+    return datos ? JSON.parse(datos) : [];
+}
 
 function mostrarPanel(id) {
     document.querySelectorAll('.panel').forEach(p => p.classList.add('oculto'));
@@ -9,6 +20,7 @@ function mostrarCargando(containerId) {
     document.getElementById(containerId).innerHTML = '<div class="cargando">Cargando datos...</div>';
 }
 
+// Funciones de carga de datos
 async function cargarKPIs() {
     mostrarPanel('panel-kpis');
     mostrarCargando('kpi-container');
@@ -18,12 +30,12 @@ async function cargarKPIs() {
         const kpis = JSON.parse(data.data);
         let html = '';
         const labels = {
-            tasa_rotura_stock_promedio: 'Rotura de Stock',
-            tiempo_entrega_promedio_entrega: 'Tiempo Entrega (días)',
-            costo_logistica_promedio: 'Costo Logístico',
-            precision_pronostico_promedio: 'Precisión Pronóstico',
-            ventas_totales_mes: 'Ventas Totales',
-            total_ordenes_mes: 'Órdenes Totales',
+            tasa_rotura_stock: 'Rotura Stock',
+            tiempo_entrega: 'Entrega (días)',
+            costo_logistico: 'Costo Logístico',
+            precision_pronostico: 'Precisión Pronóstico',
+            ventas_totales: 'Ventas Totales',
+            total_ordenes: 'Órdenes Totales',
         };
         for (const [key, val] of Object.entries(kpis)) {
             html += `<div class="kpi-card"><h3>${labels[key] || key}</h3><div class="valor">${
@@ -65,7 +77,7 @@ async function cargarLogistica() {
         let html = '<table class="tabla"><thead><tr><th>ID</th><th>Transportista</th><th>Origen</th><th>Destino</th><th>Estado</th><th>Costo</th></tr></thead><tbody>';
         items.forEach(item => {
             const badge = item.estado === 'En Transito' ? 'badge-alerta' : 'badge-info';
-            html += `<tr><td>${item.envio_id}</td><td>${item.transportista}</td><td>${item.origen}</td><td>${item.destino}</td><td><span class="badge ${badge}">${item.estado}</span></td><td>$${item.costo_envio}</td></tr>`;
+            html += `<tr><td>${item.envio_id}</td><td>${item.transportista}</td><td>${item.origen}</td><td>${item.destino}</td><td><span class="badge ${badge}">${item.estado}</span></td><td>$${item.costo}</td></tr>`;
         });
         html += '</tbody></table>';
         document.getElementById('logistica-container').innerHTML = html;
@@ -81,9 +93,9 @@ async function cargarPronosticos() {
         const res = await fetch(`${API_BASE}/api/forecast/demanda`);
         const data = await res.json();
         const items = JSON.parse(data.data);
-        let html = '<table class="tabla"><thead><tr><th>Producto</th><th>Categoría</th><th>Vendido (30d)</th><th>Promedio/Día</th><th>Pronóstico</th></tr></thead><tbody>';
+        let html = '<table class="tabla"><thead><tr><th>Producto</th><th>Vendido (30d)</th><th>Promedio/Día</th></tr></thead><tbody>';
         items.forEach(item => {
-            html += `<tr><td>${item.producto}</td><td>${item.categoria}</td><td>${item.total_vendido_30d}</td><td>${item.promedio_diario}</td><td>${item.pronostico_30d}</td></tr>`;
+            html += `<tr><td>${item.producto}</td><td>${item.total_vendido}</td><td>${item.promedio_diario}</td></tr>`;
         });
         html += '</tbody></table>';
         document.getElementById('pronostico-container').innerHTML = html;
@@ -110,42 +122,86 @@ async function cargarAlertas() {
     }
 }
 
-async function ejecutarAnalisis() {
-    mostrarPanel('panel-resultado');
-    document.getElementById('resultado-container').innerHTML = '<div class="cargando">Ejecutando agentes IA... Esto puede tomar unos segundos.</div>';
-    try {
-        const res = await fetch(`${API_BASE}/api/analysis/ejecutar`, { method: 'POST' });
-        const data = await res.json();
-        if (data.status === 'ok') {
-            document.getElementById('resultado-container').textContent = data.resultado;
-        } else {
-            document.getElementById('resultado-container').textContent = 'Error: ' + data.mensaje;
-        }
-    } catch (e) {
-        document.getElementById('resultado-container').textContent = 'Error al ejecutar el análisis: ' + e.message;
-    }
-}
-
-async function ejecutarAgente(nombre) {
-    mostrarPanel('panel-resultado');
+// Funciones del chat
+function abrirChat(agente) {
+    agenteActual = agente;
     const nombres = {
-        inventario: 'Agente de Inventario',
-        logistica: 'Agente de Logística',
-        pronosticos: 'Agente de Pronósticos',
-        ejecutivo: 'Agente Ejecutivo'
+        inventario: '📦 Agente de Inventario',
+        logistica: '🚚 Agente de Logística',
+        pronosticos: '📈 Agente de Pronósticos',
+        ejecutivo: '👔 Agente Ejecutivo'
     };
-    document.getElementById('resultado-container').innerHTML = `<div class="cargando">Ejecutando ${nombres[nombre]}... Espera unos segundos.</div>`;
+    document.getElementById('chat-titulo').textContent = nombres[agente];
+
+    document.querySelectorAll('.btn-agente').forEach(btn => btn.classList.remove('activo'));
+    document.querySelector(`[data-agente="${agente}"]`).classList.add('activo');
+
+    mostrarPanel('panel-chat');
+    renderizarChat();
+}
+
+function renderizarChat() {
+    const mensajes = cargarChat(agenteActual);
+    const container = document.getElementById('chat-mensajes');
+    container.innerHTML = '';
+
+    if (mensajes.length === 0) {
+        container.innerHTML = '<div class="chat-vacio">Escribe una pregunta sobre la cadena de suministro de RetailNova Group</div>';
+        return;
+    }
+
+    mensajes.forEach(msg => {
+        const div = document.createElement('div');
+        div.className = `chat-msg chat-${msg.tipo}`;
+        div.innerHTML = `<div class="msg-contenido">${msg.texto}</div>`;
+        container.appendChild(div);
+    });
+
+    container.scrollTop = container.scrollHeight;
+}
+
+function agregarMensaje(tipo, texto) {
+    const mensajes = cargarChat(agenteActual);
+    mensajes.push({ tipo, texto, timestamp: Date.now() });
+    guardarChat(agenteActual, mensajes);
+    renderizarChat();
+}
+
+async function enviarMensaje() {
+    const input = document.getElementById('chat-input');
+    const texto = input.value.trim();
+    if (!texto || !agenteActual) return;
+
+    input.value = '';
+    agregarMensaje('usuario', texto);
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'chat-msg chat-asistente';
+    msgDiv.innerHTML = '<div class="msg-contenido cargando-chat">Pensando...</div>';
+    document.getElementById('chat-mensajes').appendChild(msgDiv);
+
     try {
-        const res = await fetch(`${API_BASE}/api/agents/${nombre}`, { method: 'POST' });
+        const res = await fetch(`${API_BASE}/api/agents/${agenteActual}`, { method: 'POST' });
         const data = await res.json();
-        if (data.status === 'ok') {
-            document.getElementById('resultado-container').textContent = data.resultado;
-        } else {
-            document.getElementById('resultado-container').textContent = 'Error: ' + data.mensaje;
-        }
+        const respuesta = data.status === 'ok' ? data.resultado : 'Error: ' + data.mensaje;
+
+        msgDiv.querySelector('.msg-contenido').textContent = respuesta;
+        const mensajes = cargarChat(agenteActual);
+        mensajes.push({ tipo: 'asistente', texto: respuesta, timestamp: Date.now() });
+        guardarChat(agenteActual, mensajes);
     } catch (e) {
-        document.getElementById('resultado-container').textContent = 'Error: ' + e.message;
+        msgDiv.querySelector('.msg-contenido').textContent = 'Error al conectar con el agente.';
+    }
+
+    document.getElementById('chat-mensajes').scrollTop = document.getElementById('chat-mensajes').scrollHeight;
+}
+
+function limpiarChat() {
+    if (agenteActual && confirm('¿Limpiar el historial de este chat?')) {
+        localStorage.removeItem(`chat_${agenteActual}`);
+        renderizarChat();
     }
 }
 
+// Cargar KPIs al inicio
 document.addEventListener('DOMContentLoaded', cargarKPIs);

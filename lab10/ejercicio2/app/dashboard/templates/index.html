@@ -13,19 +13,19 @@
     </header>
 
     <nav class="nav">
-        <button onclick="cargarKPIs()">KPIs</button>
-        <button onclick="cargarInventarios()">Inventarios</button>
-        <button onclick="cargarLogistica()">Logística</button>
-        <button onclick="cargarPronosticos()">Pronósticos</button>
-        <button onclick="cargarAlertas()">Alertas</button>
+        <button onclick="mostrarPanel('panel-kpis')">KPIs</button>
+        <button onclick="mostrarPanel('panel-inventarios')">Inventarios</button>
+        <button onclick="mostrarPanel('panel-logistica')">Logística</button>
+        <button onclick="mostrarPanel('panel-pronosticos')">Pronósticos</button>
+        <button onclick="mostrarPanel('panel-alertas')">Alertas</button>
     </nav>
 
-    <nav class="nav" style="background: #1a2744; border-top: 2px solid #f59e0b;">
-        <span style="color: #f59e0b; padding: 10px;">Agentes IA:</span>
-        <button onclick="ejecutarAgente('inventario')" style="border-color: #f59e0b;">Inventario</button>
-        <button onclick="ejecutarAgente('logistica')" style="border-color: #f59e0b;">Logística</button>
-        <button onclick="ejecutarAgente('pronosticos')" style="border-color: #f59e0b;">Pronósticos</button>
-        <button onclick="ejecutarAgente('ejecutivo')" style="border-color: #f59e0b;">Ejecutivo</button>
+    <nav class="nav nav-agentes">
+        <span class="nav-label">Agentes IA:</span>
+        <button onclick="abrirChat('inventario')" class="btn-agente" data-agente="inventario">📦 Inventario</button>
+        <button onclick="abrirChat('logistica')" class="btn-agente" data-agente="logistica">🚚 Logística</button>
+        <button onclick="abrirChat('pronosticos')" class="btn-agente" data-agente="pronosticos">📈 Pronósticos</button>
+        <button onclick="abrirChat('ejecutivo')" class="btn-agente" data-agente="ejecutivo">👔 Ejecutivo</button>
     </nav>
 
     <main class="main">
@@ -54,9 +54,16 @@
             <div id="alerta-container"></div>
         </section>
 
-        <section id="panel-resultado" class="panel oculto">
-            <h2>Resultado del Análisis IA</h2>
-            <div id="resultado-container" class="resultado"></div>
+        <section id="panel-chat" class="panel oculto">
+            <div class="chat-header">
+                <h2 id="chat-titulo">Chat con Agente IA</h2>
+                <button onclick="limpiarChat()" class="btn-limpiar">🗑️ Limpiar</button>
+            </div>
+            <div id="chat-mensajes" class="chat-mensajes"></div>
+            <div class="chat-input">
+                <input type="text" id="chat-input" placeholder="Escribe tu pregunta sobre RetailNova..." onkeypress="if(event.key==='Enter')enviarMensaje()">
+                <button onclick="enviarMensaje()">Enviar</button>
+            </div>
         </section>
     </main>
 
