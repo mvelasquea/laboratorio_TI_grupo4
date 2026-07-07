@@ -1,4 +1,4 @@
-from crewai import Tool
+from crewai.tools import tool
 import sqlite3
 import os
 import json
@@ -10,7 +10,9 @@ def _get_connection():
     return sqlite3.connect(DB_PATH)
 
 
-def _get_company_kpis_fn():
+@tool("kpis_empresa")
+def get_company_kpis():
+    """Obtiene KPIs principales de la empresa."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -36,7 +38,9 @@ def _get_company_kpis_fn():
     }, indent=2, ensure_ascii=False)
 
 
-def _get_store_performance_fn():
+@tool("rendimiento_tiendas")
+def get_store_performance():
+    """Obtiene rendimiento de tiendas principales."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -66,7 +70,9 @@ def _get_store_performance_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_financial_summary_fn():
+@tool("resumen_financiero")
+def get_financial_summary():
+    """Obtiene resumen financiero de los últimos 30 días."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -99,7 +105,9 @@ def _get_financial_summary_fn():
     }, indent=2, ensure_ascii=False)
 
 
-def _get_alerts_fn():
+@tool("alertas_criticas")
+def get_alerts():
+    """Obtiene alertas críticas del sistema."""
     conn = _get_connection()
     cursor = conn.cursor()
 
@@ -149,28 +157,3 @@ def _get_alerts_fn():
         })
 
     return json.dumps(alerts, indent=2, ensure_ascii=False)
-
-
-get_company_kpis = Tool(
-    name="get_company_kpis",
-    description="Obtiene KPIs principales de la empresa. No necesita parámetros.",
-    func=_get_company_kpis_fn,
-)
-
-get_store_performance = Tool(
-    name="get_store_performance",
-    description="Obtiene rendimiento de tiendas principales. No necesita parámetros.",
-    func=_get_store_performance_fn,
-)
-
-get_financial_summary = Tool(
-    name="get_financial_summary",
-    description="Obtiene resumen financiero de los últimos 30 días. No necesita parámetros.",
-    func=_get_financial_summary_fn,
-)
-
-get_alerts = Tool(
-    name="get_alerts",
-    description="Obtiene alertas críticas del sistema. No necesita parámetros.",
-    func=_get_alerts_fn,
-)

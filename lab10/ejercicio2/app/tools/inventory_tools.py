@@ -1,4 +1,4 @@
-from crewai import Tool
+from crewai.tools import tool
 import sqlite3
 import os
 import json
@@ -10,7 +10,9 @@ def _get_connection():
     return sqlite3.connect(DB_PATH)
 
 
-def _get_low_stock_products_fn():
+@tool("productos_stock_bajo")
+def get_low_stock_products():
+    """Obtiene productos con stock bajo o en riesgo de rotura."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -44,7 +46,9 @@ def _get_low_stock_products_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_inventory_by_store_fn(tienda_id: int = 1):
+@tool("inventario_por_tienda")
+def get_inventory_by_store(tienda_id: int = 1):
+    """Obtiene el inventario completo de una tienda específica."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -75,7 +79,9 @@ def _get_inventory_by_store_fn(tienda_id: int = 1):
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _calculate_reorder_point_fn(producto_id: int = 1):
+@tool("calcular_punto_reorden")
+def calculate_reorder_point(producto_id: int = 1):
+    """Calcula el punto de reorden óptimo para un producto."""
     conn = _get_connection()
     cursor = conn.cursor()
 
@@ -107,7 +113,9 @@ def _calculate_reorder_point_fn(producto_id: int = 1):
     }, indent=2, ensure_ascii=False)
 
 
-def _get_stock_movements_fn():
+@tool("movimientos_stock")
+def get_stock_movements():
+    """Obtiene los movimientos de stock de las tiendas en los últimos 7 días."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -131,28 +139,3 @@ def _get_stock_movements_fn():
             "monto_total": round(r[3], 2),
         })
     return json.dumps(data, indent=2, ensure_ascii=False)
-
-
-get_low_stock_products = Tool(
-    name="get_low_stock_products",
-    description="Obtiene productos con stock bajo o en riesgo de rotura. No necesita parámetros.",
-    func=_get_low_stock_products_fn,
-)
-
-get_inventory_by_store = Tool(
-    name="get_inventory_by_store",
-    description="Obtiene el inventario completo de una tienda específica. Parámetro: tienda_id (int).",
-    func=_get_inventory_by_store_fn,
-)
-
-calculate_reorder_point = Tool(
-    name="calculate_reorder_point",
-    description="Calcula el punto de reorden óptimo para un producto. Parámetro: producto_id (int).",
-    func=_calculate_reorder_point_fn,
-)
-
-get_stock_movements = Tool(
-    name="get_stock_movements",
-    description="Obtiene los movimientos de stock de las tiendas en los últimos 7 días. No necesita parámetros.",
-    func=_get_stock_movements_fn,
-)

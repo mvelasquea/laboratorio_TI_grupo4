@@ -1,4 +1,4 @@
-from crewai import Tool
+from crewai.tools import tool
 import sqlite3
 import os
 import json
@@ -10,7 +10,9 @@ def _get_connection():
     return sqlite3.connect(DB_PATH)
 
 
-def _get_pending_shipments_fn():
+@tool("envios_pendientes")
+def get_pending_shipments():
+    """Obtiene envíos pendientes y en tránsito."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -46,7 +48,9 @@ def _get_pending_shipments_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_logistics_costs_fn():
+@tool("costos_logisticos")
+def get_logistics_costs():
+    """Obtiene costos logísticos por tienda de los últimos 30 días."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -74,7 +78,9 @@ def _get_logistics_costs_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_delivery_performance_fn():
+@tool("rendimiento_entregas")
+def get_delivery_performance():
+    """Obtiene rendimiento de entrega por transportista."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -105,7 +111,9 @@ def _get_delivery_performance_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_suppliers_ranking_fn():
+@tool("ranking_proveedores")
+def get_suppliers_ranking():
+    """Obtiene ranking de proveedores por confiabilidad."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -131,28 +139,3 @@ def _get_suppliers_ranking_fn():
             "monto_total": round(r[5], 2) if r[5] else 0,
         })
     return json.dumps(data, indent=2, ensure_ascii=False)
-
-
-get_pending_shipments = Tool(
-    name="get_pending_shipments",
-    description="Obtiene envíos pendientes y en tránsito. No necesita parámetros.",
-    func=_get_pending_shipments_fn,
-)
-
-get_logistics_costs = Tool(
-    name="get_logistics_costs",
-    description="Obtiene costos logísticos por tienda de los últimos 30 días. No necesita parámetros.",
-    func=_get_logistics_costs_fn,
-)
-
-get_delivery_performance = Tool(
-    name="get_delivery_performance",
-    description="Obtiene rendimiento de entrega por transportista. No necesita parámetros.",
-    func=_get_delivery_performance_fn,
-)
-
-get_suppliers_ranking = Tool(
-    name="get_suppliers_ranking",
-    description="Obtiene ranking de proveedores por confiabilidad. No necesita parámetros.",
-    func=_get_suppliers_ranking_fn,
-)

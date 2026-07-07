@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from app.tools.forecast_tools import (
-    _get_demand_forecast_fn,
-    _get_forecast_accuracy_fn,
-    _get_sales_trends_fn,
-    _get_top_products_fn,
+    get_demand_forecast,
+    get_forecast_accuracy,
+    get_sales_trends,
+    get_top_products,
 )
 
 router = APIRouter()
@@ -11,19 +11,19 @@ router = APIRouter()
 
 @router.get("/demanda")
 def pronostico_demanda():
-    return {"data": _get_demand_forecast_fn()}
+    return {"data": get_demand_forecast()}
 
 
 @router.get("/precision")
 def precision_pronosticos():
-    return {"data": _get_forecast_accuracy_fn()}
+    return {"data": get_forecast_accuracy()}
 
 
 @router.get("/tendencias")
 def tendencias_ventas():
-    return {"data": _get_sales_trends_fn()}
+    return {"data": get_sales_trends()}
 
 
 @router.get("/productos-top")
 def productos_top():
-    return {"data": _get_top_products_fn()}
+    return {"data": get_top_products()}

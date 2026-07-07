@@ -1,4 +1,4 @@
-from crewai import Tool
+from crewai.tools import tool
 import sqlite3
 import os
 import json
@@ -10,7 +10,9 @@ def _get_connection():
     return sqlite3.connect(DB_PATH)
 
 
-def _get_demand_forecast_fn():
+@tool("pronostico_demanda")
+def get_demand_forecast():
+    """Obtiene pronóstico de demanda basado en ventas históricas."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -41,7 +43,9 @@ def _get_demand_forecast_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_forecast_accuracy_fn():
+@tool("precision_pronosticos")
+def get_forecast_accuracy():
+    """Obtiene precisión de pronósticos anteriores."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -72,7 +76,9 @@ def _get_forecast_accuracy_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_sales_trends_fn():
+@tool("tendencias_ventas")
+def get_sales_trends():
+    """Obtiene tendencias de ventas de los últimos 90 días."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -99,7 +105,9 @@ def _get_sales_trends_fn():
     return json.dumps(data, indent=2, ensure_ascii=False)
 
 
-def _get_top_products_fn():
+@tool("productos_top")
+def get_top_products():
+    """Obtiene los 10 productos más vendidos."""
     conn = _get_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -126,28 +134,3 @@ def _get_top_products_fn():
             "ingreso_total": round(r[4], 2),
         })
     return json.dumps(data, indent=2, ensure_ascii=False)
-
-
-get_demand_forecast = Tool(
-    name="get_demand_forecast",
-    description="Obtiene pronóstico de demanda basado en ventas históricas. No necesita parámetros.",
-    func=_get_demand_forecast_fn,
-)
-
-get_forecast_accuracy = Tool(
-    name="get_forecast_accuracy",
-    description="Obtiene precisión de pronósticos anteriores. No necesita parámetros.",
-    func=_get_forecast_accuracy_fn,
-)
-
-get_sales_trends = Tool(
-    name="get_sales_trends",
-    description="Obtiene tendencias de ventas de los últimos 90 días. No necesita parámetros.",
-    func=_get_sales_trends_fn,
-)
-
-get_top_products = Tool(
-    name="get_top_products",
-    description="Obtiene los 10 productos más vendidos. No necesita parámetros.",
-    func=_get_top_products_fn,
-)
