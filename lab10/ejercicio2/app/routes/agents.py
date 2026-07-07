@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from app.config import OLLAMA_BASE_URL, OLLAMA_MODEL
-from app.tools.db_queries import get_low_stock_products, get_pending_shipments, get_demand_forecast, get_company_kpis
+from app.tools.db_queries import query_low_stock_products, query_pending_shipments, query_demand_forecast, query_company_kpis
 from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 
@@ -19,7 +19,7 @@ llm = ChatOllama(model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL)
 
 @router.post("/inventario")
 def ejecutar_inventario():
-    datos = get_low_stock_products()
+    datos = query_low_stock_products()
     respuesta = llm.invoke([
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Resume estos productos con stock bajo:\n\n{datos}")
@@ -29,7 +29,7 @@ def ejecutar_inventario():
 
 @router.post("/logistica")
 def ejecutar_logistica():
-    datos = get_pending_shipments()
+    datos = query_pending_shipments()
     respuesta = llm.invoke([
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Resume estos envíos pendientes:\n\n{datos}")
@@ -39,7 +39,7 @@ def ejecutar_logistica():
 
 @router.post("/pronosticos")
 def ejecutar_pronosticos():
-    datos = get_demand_forecast()
+    datos = query_demand_forecast()
     respuesta = llm.invoke([
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Resume estos pronósticos de demanda:\n\n{datos}")
@@ -49,7 +49,7 @@ def ejecutar_pronosticos():
 
 @router.post("/ejecutivo")
 def ejecutar_ejecutivo():
-    datos = get_company_kpis()
+    datos = query_company_kpis()
     respuesta = llm.invoke([
         SystemMessage(content=SYSTEM_PROMPT),
         HumanMessage(content=f"Resume estos KPIs ejecutivos:\n\n{datos}")
