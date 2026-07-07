@@ -25,8 +25,8 @@ def ejecutar_inventario():
     try:
         resultado = _run_agent(
             inventory_agent,
-            "Revisa stock bajo y calcula puntos de reorden de RetailNova.",
-            "Lista de productos críticos y recomendaciones.",
+            "EJECUTA UNA SOLA VEZ la herramienta productos_stock_bajo. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
+            "Resumen de productos con stock bajo.",
         )
         return {"status": "ok", "resultado": str(resultado)}
     except Exception as e:
@@ -38,8 +38,8 @@ def ejecutar_logistica():
     try:
         resultado = _run_agent(
             logistics_agent,
-            "Revisa envíos pendientes y costos logísticos de RetailNova.",
-            "Estado de logística y costos.",
+            "EJECUTA UNA SOLA VEZ la herramienta envios_pendientes. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
+            "Resumen de envíos pendientes.",
         )
         return {"status": "ok", "resultado": str(resultado)}
     except Exception as e:
@@ -51,8 +51,8 @@ def ejecutar_pronosticos():
     try:
         resultado = _run_agent(
             forecast_agent,
-            "Evalúa demanda y precisión de pronósticos de RetailNova.",
-            "Análisis de pronósticos.",
+            "EJECUTA UNA SOLA VEZ la herramienta pronostico_demanda. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
+            "Resumen de pronósticos de demanda.",
         )
         return {"status": "ok", "resultado": str(resultado)}
     except Exception as e:
@@ -64,8 +64,8 @@ def ejecutar_ejecutivo():
     try:
         resultado = _run_agent(
             executive_agent,
-            "Genera resumen ejecutivo con KPIs y alertas de RetailNova.",
-            "Resumen ejecutivo.",
+            "EJECUTA UNA SOLA VEZ la herramienta kpis_empresa. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
+            "Resumen de KPIs ejecutivos.",
         )
         return {"status": "ok", "resultado": str(resultado)}
     except Exception as e:
