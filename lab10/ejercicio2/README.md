@@ -1,6 +1,6 @@
 # RetailNova Group - Agentes IA para Cadena de Suministro
 
-Sistema de agentes IA colaborativos para optimizar la cadena de suministro de RetailNova Group, una corporación multinacional con más de 300 tiendas en Latinoamérica.
+Sistema de agentes IA colaborativos para optimizar la cadena de suministro de RetailNova Group, corporación multinacional con más de 300 tiendas en Latinoamérica.
 
 ## Problemas que resuelve
 
@@ -13,18 +13,18 @@ Sistema de agentes IA colaborativos para optimizar la cadena de suministro de Re
 
 | Agente | Función |
 |--------|---------|
-| **Inventarios** | Monitorea stock, detecta roturas y calcula puntos de reorden |
-| **Logística** | Optimiza envíos, analiza costos y evalúa transportistas |
-| **Pronósticos** | Predice demanda y evalúa precisión de predicciones |
-| **Ejecutivo** | Consolida KPIs, genera alertas y recomendaciones |
+| **Inventarios** | Detecta stock bajo, calcula puntos de reorden |
+| **Logística** | Revisa envíos pendientes y costos |
+| **Pronósticos** | Evalúa demanda y precisión de predicciones |
+| **Ejecutivo** | Consolida KPIs y genera alertas |
 
 ## Tecnologías
 
-- **Framework de agentes:** CrewAI
-- **Motor de LLM:** Ollama (Llama 3.2)
+- **Framework de agentes:** LangChain
+- **Motor de LLM:** Ollama (Llama 3.2) - Local
 - **Servidor:** FastAPI
 - **Base de datos:** SQLite
-- **Dashboard:** HTML/CSS/JS
+- **Dashboard:** HTML/CSS/JS con chat interactivo
 
 ## Instalación
 
@@ -34,10 +34,13 @@ pip install -r requirements.txt
 
 ## Configuración
 
-Crear archivo `.env` con:
+1. Instalar Ollama: https://ollama.com
+2. Descargar el modelo: `ollama pull llama3.2`
+3. Crear archivo `.env`:
 
 ```
-GROQ_API_KEY=tu_api_key_aqui
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=llama3.2
 DATABASE_URL=sqlite:///retailnova.db
 ```
 
@@ -60,25 +63,25 @@ El servidor estará disponible en `http://localhost:8000`
 | GET | `/api/forecast/demanda` | Pronóstico de demanda |
 | GET | `/api/executive/kpis` | KPIs de la empresa |
 | GET | `/api/executive/alertas` | Alertas críticas |
-| POST | `/api/analysis/ejecutar` | Ejecutar análisis completo |
+| POST | `/api/agents/chat/{agente}` | Chat interactivo con agente |
 
 ## Dashboard
 
-Acceder a `http://localhost:8000/static/index.html` para ver el panel de control.
+Acceder a `http://localhost:8000` para ver el panel de control con chat interactivo persistente.
 
 ## Estructura del proyecto
 
 ```
 ejercicio2/
 ├── app/
-│   ├── agents/        # Agentes IA (CrewAI)
-│   ├── tools/         # Herramientas de cada agente
-│   ├── models/        # Modelos de base de datos
+│   ├── agents/        # Orquestador de agentes
+│   ├── tools/         # Consultas a base de datos
+│   ├── models/        # Población de BD
 │   ├── routes/        # Endpoints API
-│   ├── dashboard/     # Frontend
-│   ├── config.py      # Configuración
+│   ├── dashboard/     # Frontend con chat
+│   ├── config.py      # Configuración Ollama
 │   └── main.py        # Servidor FastAPI
-├── retailnova_db.sql  # Script SQL de la BD
+├── retailnova.db      # Base de datos SQLite
 ├── requirements.txt   # Dependencias
 └── run.py             # Punto de entrada
 ```
