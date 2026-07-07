@@ -12,8 +12,13 @@ def seed_database():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    with open(SQL_PATH, "r", encoding="utf-8") as f:
-        sql_script = f.read()
+    for enc in ("utf-8-sig", "utf-8", "utf-16", "latin-1"):
+        try:
+            with open(SQL_PATH, "r", encoding=enc) as f:
+                sql_script = f.read()
+            break
+        except UnicodeDecodeError:
+            continue
 
     cursor.executescript(sql_script)
     conn.commit()
