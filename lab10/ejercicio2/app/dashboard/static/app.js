@@ -181,7 +181,11 @@ async function enviarMensaje() {
     document.getElementById('chat-mensajes').appendChild(msgDiv);
 
     try {
-        const res = await fetch(`${API_BASE}/api/agents/${agenteActual}`, { method: 'POST' });
+        const res = await fetch(`${API_BASE}/api/agents/chat/${agenteActual}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pregunta: texto })
+        });
         const data = await res.json();
         const respuesta = data.status === 'ok' ? data.resultado : 'Error: ' + data.mensaje;
 
