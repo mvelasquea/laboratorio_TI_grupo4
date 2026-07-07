@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from app.routes import inventory, logistics, forecast, executive, analysis
 import os
 
@@ -23,9 +24,9 @@ app.include_router(executive.router, prefix="/api/executive", tags=["Ejecutivo"]
 app.include_router(analysis.router, prefix="/api/analysis", tags=["Análisis"])
 
 
-@app.get("/")
-def root():
-    return {"message": "RetailNova Group - Agentes IA para Cadena de Suministro"}
+@app.get("/", response_class=HTMLResponse)
+def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")
