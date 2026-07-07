@@ -1,0 +1,16 @@
+# Archivos de texto
+*.txt
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Archivos de Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
