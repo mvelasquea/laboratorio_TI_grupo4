@@ -30,7 +30,7 @@ inventory_agent = Agent(
     llm=llm,
     verbose=True,
     allow_delegation=False,
-    max_iter=2,
+    max_iter=5,
 )
 
 logistics_agent = Agent(
@@ -41,7 +41,7 @@ logistics_agent = Agent(
     llm=llm,
     verbose=True,
     allow_delegation=False,
-    max_iter=2,
+    max_iter=5,
 )
 
 forecast_agent = Agent(
@@ -52,7 +52,7 @@ forecast_agent = Agent(
     llm=llm,
     verbose=True,
     allow_delegation=False,
-    max_iter=2,
+    max_iter=5,
 )
 
 executive_agent = Agent(
@@ -63,5 +63,5 @@ executive_agent = Agent(
     llm=llm,
     verbose=True,
     allow_delegation=False,
-    max_iter=2,
+    max_iter=5,
 )
