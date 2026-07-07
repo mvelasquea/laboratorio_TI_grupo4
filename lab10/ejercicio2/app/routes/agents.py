@@ -4,54 +4,37 @@ from app.tools.inventory_tools import get_low_stock_products
 from app.tools.logistics_tools import get_pending_shipments
 from app.tools.forecast_tools import get_demand_forecast
 from app.tools.executive_tools import get_company_kpis
-import requests
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
 
 router = APIRouter()
 
-
-def _call_ollama(prompt):
-    try:
-        response = requests.post(
-            f"{OLLAMA_BASE_URL}/api/generate",
-            json={
-                "model": OLLAMA_MODEL,
-                "prompt": prompt,
-                "stream": False,
-            },
-            timeout=30,
-        )
-        return response.json().get("response", "Sin respuesta")
-    except Exception as e:
-        return f"Error al conectar con Ollama: {str(e)}"
+llm = ChatOllama(model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL)
 
 
 @router.post("/inventario")
 def ejecutar_inventario():
     datos = get_low_stock_products()
-    prompt = f"Resume estos productos con stock bajo de forma clara y concisa:\n\n{datos}"
-    respuesta = _call_ollama(prompt)
-    return {"status": "ok", "resultado": respuesta}
+    respuesta = llm.invoke([HumanMessage(content=f"Resume de forma clara y concisa estos productos con stock bajo:\n\n{datos}")])
+    return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/logistica")
 def ejecutar_logistica():
     datos = get_pending_shipments()
-    prompt = f"Resume estos envíos pendientes de forma clara y concisa:\n\n{datos}"
-    respuesta = _call_ollama(prompt)
-    return {"status": "ok", "resultado": respuesta}
+    respuesta = llm.invoke([HumanMessage(content=f"Resume de forma clara y concisa estos envíos pendientes:\n\n{datos}")])
+    return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/pronosticos")
 def ejecutar_pronosticos():
     datos = get_demand_forecast()
-    prompt = f"Resume estos pronósticos de demanda de forma clara y concisa:\n\n{datos}"
-    respuesta = _call_ollama(prompt)
-    return {"status": "ok", "resultado": respuesta}
+    respuesta = llm.invoke([HumanMessage(content=f"Resume de forma clara y concisa estos pronósticos de demanda:\n\n{datos}")])
+    return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/ejecutivo")
 def ejecutar_ejecutivo():
     datos = get_company_kpis()
-    prompt = f"Resume estos KPIs ejecutivos de forma clara y concisa:\n\n{datos}"
-    respuesta = _call_ollama(prompt)
-    return {"status": "ok", "resultado": respuesta}
+    respuesta = llm.invoke([HumanMessage(content=f"Resume de forma clara y concisa estos KPIs ejecutivos:\n\n{datos}")])
+    return {"status": "ok", "resultado": respuesta.content}
