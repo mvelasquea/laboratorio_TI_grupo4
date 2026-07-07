@@ -1,0 +1,28 @@
+INFORME TÉCNICO: AGENTES IA COLABORATIVOS
+PARA OPTIMIZACIÓN DE CADENA DE SUMINISTRO
+RETAILNOVA GROUP
+
+ARQUITECTURA EMPRESARIAL
+- Diagrama de la arquitectura propuesta
+- Descripción de componentes y capas
+- Flujo de información entre sistemas
+
+DISEÑO MULTIAGENTE
+- Especificación de cada agente (rol, herramientas, memoria)
+- Diagrama de interacciones
+- Flujo de trabajo (workflow)
+
+EVIDENCIAS
+- Capturas de ejecución de la simulación
+- Logs de los agentes
+- Resultados generados
+
+DASHBOARD EJECUTIVO
+- Métricas de KPIs
+- Visualización de resultados
+- Indicadores de desempeño
+
+CONCLUSIONES
+- Resultados alcanzados
+- Beneficios logrados
+- Recomendaciones y mejoras 

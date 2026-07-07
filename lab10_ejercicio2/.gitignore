@@ -1,6 +1,3 @@
-# Archivos de texto
-*.txt
-
 # Archivos temporales
 *.tmp
 *.log
