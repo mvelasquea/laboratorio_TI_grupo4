@@ -18,7 +18,14 @@
         <button onclick="cargarLogistica()">Logística</button>
         <button onclick="cargarPronosticos()">Pronósticos</button>
         <button onclick="cargarAlertas()">Alertas</button>
-        <button onclick="ejecutarAnalisis()" class="btn-primario">Ejecutar Análisis IA</button>
+    </nav>
+
+    <nav class="nav" style="background: #1a2744; border-top: 2px solid #f59e0b;">
+        <span style="color: #f59e0b; padding: 10px;">Agentes IA:</span>
+        <button onclick="ejecutarAgente('inventario')" style="border-color: #f59e0b;">Inventario</button>
+        <button onclick="ejecutarAgente('logistica')" style="border-color: #f59e0b;">Logística</button>
+        <button onclick="ejecutarAgente('pronosticos')" style="border-color: #f59e0b;">Pronósticos</button>
+        <button onclick="ejecutarAgente('ejecutivo')" style="border-color: #f59e0b;">Ejecutivo</button>
     </nav>
 
     <main class="main">

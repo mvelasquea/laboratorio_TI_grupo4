@@ -126,4 +126,26 @@ async function ejecutarAnalisis() {
     }
 }
 
+async function ejecutarAgente(nombre) {
+    mostrarPanel('panel-resultado');
+    const nombres = {
+        inventario: 'Agente de Inventario',
+        logistica: 'Agente de Logística',
+        pronosticos: 'Agente de Pronósticos',
+        ejecutivo: 'Agente Ejecutivo'
+    };
+    document.getElementById('resultado-container').innerHTML = `<div class="cargando">Ejecutando ${nombres[nombre]}... Espera unos segundos.</div>`;
+    try {
+        const res = await fetch(`${API_BASE}/api/agents/${nombre}`, { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+            document.getElementById('resultado-container').textContent = data.resultado;
+        } else {
+            document.getElementById('resultado-container').textContent = 'Error: ' + data.mensaje;
+        }
+    } catch (e) {
+        document.getElementById('resultado-container').textContent = 'Error: ' + e.message;
+    }
+}
+
 document.addEventListener('DOMContentLoaded', cargarKPIs);

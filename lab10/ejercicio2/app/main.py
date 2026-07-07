@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
-from app.routes import inventory, logistics, forecast, executive, analysis
+from app.routes import inventory, logistics, forecast, executive, analysis, agents
 import os
 
 app = FastAPI(
@@ -22,6 +22,7 @@ app.include_router(logistics.router, prefix="/api/logistics", tags=["Logística"
 app.include_router(forecast.router, prefix="/api/forecast", tags=["Pronósticos"])
 app.include_router(executive.router, prefix="/api/executive", tags=["Ejecutivo"])
 app.include_router(analysis.router, prefix="/api/analysis", tags=["Análisis"])
+app.include_router(agents.router, prefix="/api/agents", tags=["Agentes IA"])
 
 
 @app.get("/", response_class=HTMLResponse)
