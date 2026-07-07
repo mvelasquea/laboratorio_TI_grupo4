@@ -21,7 +21,7 @@ Sistema de agentes IA colaborativos para optimizar la cadena de suministro de Re
 ## Tecnologías
 
 - **Framework de agentes:** CrewAI
-- **API de LLM:** Groq (Llama 3.3)
+- **Motor de LLM:** Ollama (Llama 3.2)
 - **Servidor:** FastAPI
 - **Base de datos:** SQLite
 - **Dashboard:** HTML/CSS/JS
