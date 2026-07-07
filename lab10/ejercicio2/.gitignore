@@ -9,8 +9,18 @@
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 .env
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
 
 # Archivos de sistema
 .DS_Store
 Thumbs.db
+
+# Base de datos
+*.db
+*.sqlite3
