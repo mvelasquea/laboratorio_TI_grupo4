@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RetailNova Group - Panel de Control</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1>RetailNova Group</h1>
+        <p>Panel de Control - Agentes IA para Cadena de Suministro</p>
+    </header>
+
+    <nav class="nav">
+        <button onclick="cargarKPIs()">KPIs</button>
+        <button onclick="cargarInventarios()">Inventarios</button>
+        <button onclick="cargarLogistica()">Logística</button>
+        <button onclick="cargarPronosticos()">Pronósticos</button>
+        <button onclick="cargarAlertas()">Alertas</button>
+        <button onclick="ejecutarAnalisis()" class="btn-primario">Ejecutar Análisis IA</button>
+    </nav>
+
+    <main class="main">
+        <section id="panel-kpis" class="panel">
+            <h2>KPIs Principales</h2>
+            <div id="kpi-container" class="grid"></div>
+        </section>
+
+        <section id="panel-inventarios" class="panel oculto">
+            <h2>Estado de Inventarios</h2>
+            <div id="inventario-container"></div>
+        </section>
+
+        <section id="panel-logistica" class="panel oculto">
+            <h2>Logística y Envíos</h2>
+            <div id="logistica-container"></div>
+        </section>
+
+        <section id="panel-pronosticos" class="panel oculto">
+            <h2>Pronósticos de Demanda</h2>
+            <div id="pronostico-container"></div>
+        </section>
+
+        <section id="panel-alertas" class="panel oculto">
+            <h2>Alertas Críticas</h2>
+            <div id="alerta-container"></div>
+        </section>
+
+        <section id="panel-resultado" class="panel oculto">
+            <h2>Resultado del Análisis IA</h2>
+            <div id="resultado-container" class="resultado"></div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
