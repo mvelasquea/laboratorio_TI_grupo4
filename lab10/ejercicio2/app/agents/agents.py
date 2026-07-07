@@ -1,5 +1,5 @@
 from crewai import Agent, LLM
-from app.config import GROQ_API_KEY
+from app.config import OLLAMA_BASE_URL, OLLAMA_MODEL
 from app.tools.inventory_tools import (
     get_low_stock_products,
     calculate_reorder_point,
@@ -18,8 +18,8 @@ from app.tools.executive_tools import (
 )
 
 llm = LLM(
-    model="groq/llama-3.1-8b-instant",
-    api_key=GROQ_API_KEY,
+    model=f"ollama/{OLLAMA_MODEL}",
+    base_url=OLLAMA_BASE_URL,
 )
 
 inventory_agent = Agent(
