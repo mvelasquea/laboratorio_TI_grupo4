@@ -2,10 +2,15 @@ from fastapi import APIRouter
 from app.config import OLLAMA_BASE_URL, OLLAMA_MODEL
 from app.tools.db_queries import (
     query_low_stock_products,
+    query_inventory_by_store,
     query_pending_shipments,
+    query_logistics_costs,
     query_demand_forecast,
+    query_forecast_accuracy,
     query_company_kpis,
+    query_store_performance,
     query_alerts,
+    query_top_products,
 )
 from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -15,62 +20,80 @@ router = APIRouter()
 llm = ChatOllama(model=OLLAMA_MODEL, base_url=OLLAMA_BASE_URL)
 
 
+def _obtener_todos_los_datos():
+    return f"""PRODUCTOS CON STOCK BAJO:
+{query_low_stock_products()}
+
+INVENTARIO TIENDA 1 (Lima):
+{query_inventory_by_store(1)}
+
+INVENTARIO TIENDA 2 (Bogotá):
+{query_inventory_by_store(2)}
+
+INVENTARIO TIENDA 3 (Santiago):
+{query_inventory_by_store(3)}
+
+INVENTARIO TIENDA 4 (Online):
+{query_inventory_by_store(4)}
+
+ENVÍOS PENDIENTES:
+{query_pending_shipments()}
+
+COSTOS LOGÍSTICOS:
+{query_logistics_costs()}
+
+DEMANDA DE PRODUCTOS:
+{query_demand_forecast()}
+
+PRODUCTOS MÁS VENDIDOS:
+{query_top_products()}
+
+KPIs:
+{query_company_kpis()}
+
+RENDIMIENTO TIENDAS:
+{query_store_performance()}
+
+ALERTAS:
+{query_alerts()}"""
+
+
 @router.post("/inventario")
 def ejecutar_inventario():
-    datos = query_low_stock_products()
+    datos = _obtener_todos_los_datos()
     respuesta = llm.invoke([
-        SystemMessage(content="""Eres un analista de inventarios de RetailNova Group.
-REGLAS ESTRICTAS:
-- Menciona los NOMBRES REALES de los productos y tiendas que aparecen en los datos.
-- NO digas "Producto 1", "Producto 2". Di el nombre real como "Coca-Cola 2L" o "Laptop HP Pavilion 15".
-- Sé breve y directo.
-- Habla en español."""),
-        HumanMessage(content=f"Datos de inventario con stock bajo:\n{datos}")
+        SystemMessage(content="Eres un analista de inventarios de RetailNova Group. Usa los datos reales que te doy. Menciona nombres de productos y tiendas. Sé breve."),
+        HumanMessage(content=f"DATOS:\n{datos}\n\nResume los productos con stock bajo.")
     ])
     return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/logistica")
 def ejecutar_logistica():
-    datos = query_pending_shipments()
+    datos = _obtener_todos_los_datos()
     respuesta = llm.invoke([
-        SystemMessage(content="""Eres un especialista en logística de RetailNova Group.
-REGLAS ESTRICTAS:
-- Menciona los IDs de envío, transportistas y destinos REALES que aparecen en los datos.
-- Sé breve y directo.
-- Habla en español."""),
-        HumanMessage(content=f"Datos de envíos pendientes:\n{datos}")
+        SystemMessage(content="Eres un especialista en logística de RetailNova Group. Usa los datos reales que te doy. Sé breve."),
+        HumanMessage(content=f"DATOS:\n{datos}\n\nResume los envíos pendientes y costos.")
     ])
     return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/pronosticos")
 def ejecutar_pronosticos():
-    datos = query_demand_forecast()
+    datos = _obtener_todos_los_datos()
     respuesta = llm.invoke([
-        SystemMessage(content="""Eres un analista de pronósticos de RetailNova Group.
-REGLAS ESTRICTAS:
-- Menciona los NOMBRES REALES de los productos que aparecen en los datos.
-- NO digas "Producto 1". Di el nombre real como "Coca-Cola 2L" o "PlayStation 5".
-- Sé breve y directo.
-- Habla en español."""),
-        HumanMessage(content=f"Datos de pronósticos de demanda:\n{datos}")
+        SystemMessage(content="Eres un analista de pronósticos de RetailNova Group. Usa los datos reales que te doy. Menciona nombres de productos. Sé breve."),
+        HumanMessage(content=f"DATOS:\n{datos}\n\nResume la demanda y pronósticos.")
     ])
     return {"status": "ok", "resultado": respuesta.content}
 
 
 @router.post("/ejecutivo")
 def ejecutar_ejecutivo():
-    kpis = query_company_kpis()
-    alertas = query_alerts()
+    datos = _obtener_todos_los_datos()
     respuesta = llm.invoke([
-        SystemMessage(content="""Eres un asistente ejecutivo de RetailNova Group.
-REGLAS ESTRICTAS:
-- Presenta los KPIs con sus valores numéricos reales.
-- Si hay alertas, menciona los detalles específicos.
-- Sé breve y directo.
-- Habla en español."""),
-        HumanMessage(content=f"KPIs:\n{kpis}\n\nAlertas:\n{alertas}")
+        SystemMessage(content="Eres un asistente ejecutivo de RetailNova Group. Usa los datos reales que te doy. Presenta KPIs y alertas. Sé breve."),
+        HumanMessage(content=f"DATOS:\n{datos}\n\nGenera un resumen ejecutivo.")
     ])
     return {"status": "ok", "resultado": respuesta.content}
 
@@ -78,32 +101,27 @@ REGLAS ESTRICTAS:
 @router.post("/chat/{agente}")
 def chat_agente(agente: str, body: dict):
     pregunta = body.get("pregunta", "")
+    datos = _obtener_todos_los_datos()
 
-    if agente == "inventario":
-        datos = query_low_stock_products()
-        rol = "analista de inventarios de RetailNova Group"
-        reglas = "Menciona NOMBRES REALES de productos y tiendas. NO digas 'Producto 1'. Di el nombre real."
-    elif agente == "logistica":
-        datos = query_pending_shipments()
-        rol = "especialista en logística de RetailNova Group"
-        reglas = "Menciona IDs de envío, transportistas y destinos REALES."
-    elif agente == "pronosticos":
-        datos = query_demand_forecast()
-        rol = "analista de pronósticos de RetailNova Group"
-        reglas = "Menciona NOMBRES REALES de productos. NO digas 'Producto 1'. Di el nombre real."
-    elif agente == "ejecutivo":
-        datos = f"KPIs:\n{query_company_kpis()}\n\nAlertas:\n{query_alerts()}"
-        rol = "asistente ejecutivo de RetailNova Group"
-        reglas = "Presenta valores numéricos reales. Menciona detalles específicos de alertas."
-    else:
-        return {"status": "error", "mensaje": "Agente no válido"}
+    roles = {
+        "inventario": "analista de inventarios",
+        "logistica": "especialista en logística",
+        "pronosticos": "analista de pronósticos",
+        "ejecutivo": "asistente ejecutivo",
+    }
+
+    rol = roles.get(agente, "asistente de RetailNova Group")
 
     respuesta = llm.invoke([
-        SystemMessage(content=f"""Eres {rol}.
-{reglas}
-Si la pregunta no es sobre RetailNova, di que solo puedes ayudar con temas de la empresa.
-Sé breve, responde solo lo que te preguntan, y USA LOS DATOS REALES que te doy."""),
-        HumanMessage(content=f"DATOS ACTUALES:\n{datos}\n\nPREGUNTA: {pregunta}")
+        SystemMessage(content=f"""Eres {rol} de RetailNova Group.
+Tienes acceso a TODA la base de datos de la empresa.
+REGLAS:
+- Usa los datos reales que te doy para responder.
+- Menciona nombres de productos, tiendas, valores numéricos.
+- Si no encuentras la información en los datos, di "no tengo esa información".
+- Si la pregunta no es sobre RetailNova, di que solo puedes ayudar con temas de la empresa.
+- Sé breve y responde solo lo que te preguntan."""),
+        HumanMessage(content=f"BASE DE DATOS COMPLETA:\n{datos}\n\nPREGUNTA DEL USUARIO: {pregunta}")
     ])
 
     return {"status": "ok", "resultado": respuesta.content}
