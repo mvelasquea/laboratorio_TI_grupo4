@@ -1,43 +1,46 @@
-from crewai import Crew, Process, Task
-from app.agents.agents import (
-    inventory_agent,
-    logistics_agent,
-    forecast_agent,
-    executive_agent,
-)
+from app.config import OLLAMA_BASE_URL, OLLAMA_MODEL
+from app.tools.inventory_tools import get_low_stock_products
+from app.tools.logistics_tools import get_pending_shipments
+from app.tools.forecast_tools import get_demand_forecast
+from app.tools.executive_tools import get_company_kpis
+import requests
+
+
+def _call_ollama(prompt):
+    try:
+        response = requests.post(
+            f"{OLLAMA_BASE_URL}/api/generate",
+            json={
+                "model": OLLAMA_MODEL,
+                "prompt": prompt,
+                "stream": False,
+            },
+            timeout=60,
+        )
+        return response.json().get("response", "Sin respuesta")
+    except Exception as e:
+        return f"Error al conectar con Ollama: {str(e)}"
 
 
 def run_crew_analysis():
-    tarea_inventario = Task(
-        description="EJECUTA UNA SOLA VEZ la herramienta productos_stock_bajo. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
-        expected_output="Resumen de productos con stock bajo.",
-        agent=inventory_agent,
-    )
+    inventario = get_low_stock_products()
+    logistica = get_pending_shipments()
+    pronostico = get_demand_forecast()
+    kpis = get_company_kpis()
 
-    tarea_logistica = Task(
-        description="EJECUTA UNA SOLA VEZ la herramienta envios_pendientes. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
-        expected_output="Resumen de envíos pendientes.",
-        agent=logistics_agent,
-    )
+    prompt = f"""Eres un analista de RetailNova Group. Resume estos datos de forma clara:
 
-    tarea_pronostico = Task(
-        description="EJECUTA UNA SOLA VEZ la herramienta pronostico_demanda. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
-        expected_output="Resumen de pronósticos de demanda.",
-        agent=forecast_agent,
-    )
+INVENTARIO:
+{inventario}
 
-    tarea_ejecutivo = Task(
-        description="EJECUTA UNA SOLA VEZ la herramienta kpis_empresa. Luego resume los resultados en texto claro. No vuelvas a ejecutar la herramienta.",
-        expected_output="Resumen de KPIs ejecutivos.",
-        agent=executive_agent,
-    )
+LOGISTICA:
+{logistica}
 
-    crew = Crew(
-        agents=[inventory_agent, logistics_agent, forecast_agent, executive_agent],
-        tasks=[tarea_inventario, tarea_logistica, tarea_pronostico, tarea_ejecutivo],
-        process=Process.sequential,
-        verbose=True,
-    )
+PRONOSTICOS:
+{pronostico}
 
-    result = crew.kickoff()
-    return result
+KPIs:
+{kpis}
+
+Genera un resumen ejecutivo breve con los puntos más importantes."""
+    return _call_ollama(prompt)
